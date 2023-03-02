@@ -1,0 +1,489 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+      crossorigin="anonymous"
+    />
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+      crossorigin="anonymous"
+    ></script>
+
+    <script
+      defer
+      src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"
+    ></script>
+    <script defer src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+
+    <link
+      href="https://unpkg.com/tabulator-tables@5.2.7/dist/css/tabulator.min.css"
+      rel="stylesheet"
+    />
+    <script
+      type="text/javascript"
+      src="https://unpkg.com/tabulator-tables@5.2.7/dist/js/tabulator.min.js"
+    ></script>
+    <script
+      defer
+      src="https://cdnjs.cloudflare.com/ajax/libs/granim/2.0.0/granim.min.js"
+      integrity="sha512-CmlPTWm5+a1Gt2YSNk2rGZVvbH3Zge6imS7M4/vrhC8d+A1RcehmLxWMqUdv8aEu7pwfTo74EtnrR+8Cf8KdCA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script
+      defer
+      src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"
+      integrity="sha512-WFN04846sdKMIP5LKNphMaWzU7YpMyCU245etK3g/2ARYbPK9Ub18eG+ljU96qKRCWh+quCY7yefSmlkQw1ANQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://oss.sheetjs.com/sheetjs/xlsx.full.min.js"
+    ></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.20/dist/sweetalert2.all.min.js"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"
+      integrity="sha512-E8QSvWZ0eCLGk4km3hxSsNmGWbLtSCSUcewDQPQWZF6pEU8GlT8a5fF32wOl1i8ftdMhssTrF/OhyGWwonTcXA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  </head>
+  <body>
+    <div class="border-bottom">
+      <p class="ms-2 mt-1 text-start fs-2 fw-semibold">권한주기</p>
+    </div>
+
+    <div class="row">
+      <div class="input-group mb-3">
+        <span class="input-group-text">신청날짜</span>
+        <input type="text" class="form-control request" disabled>
+      </div>
+      <div class="input-group mb-3">
+        <span class="input-group-text">ID</span>
+        <input type="text" class="form-control id" disabled>
+      </div>
+      <div class="input-group mb-3">
+        <span class="input-group-text">이름</span>
+        <input type="text" class="form-control name" disabled>
+      </div>
+      <div class="input-group mb-3">
+        <span class="input-group-text">생년월일</span>
+        <input type="text" class="form-control birth" disabled>
+      </div>
+      <div class="input-group mb-3">
+        <span class="input-group-text">전화번호</span>
+        <input type="text" class="form-control phone" disabled>
+      </div>
+      <div class="input-group mb-3">
+        <span class="input-group-text">소속병원</span>
+        <input type="text" class="form-control hospital" disabled>
+      </div>
+      <div class="input-group mb-3">
+        <span class="input-group-text">소속부서</span>
+        <input type="text" class="form-control department" disabled>
+      </div>
+      <div class="input-group mb-3">
+        <span class="input-group-text">신청사유</span>
+        <textarea class="form-control reason" disabled rows="3"></textarea>
+      </div>
+      <div class="border text-center" style="font-size:13px">
+        <div class="row">
+          <div class="col-6" style="margin-top: 5px;">
+            <div class="form-check mx-1">
+              <input class="form-check-input" type="checkbox" value="" id="checkBase">
+              <label class="form-check-label" for="checkBase">
+                기본권한
+              </label>
+            </div>
+          </div>
+          <div class="col-6" style="margin-top: 5px;">
+            <div class="form-check mx-1">
+              <input class="form-check-input" type="checkbox" value="" id="checkAll">
+              <label class="form-check-label" for="checkAll">
+                전체권한
+              </label>
+            </div>
+          </div>
+          
+          <div class="col-6" style="margin-top: 5px;">
+            <div class="form-check mx-1">
+              <input class="form-check-input" type="checkbox" value="" id="checkNewReserve">
+              <label class="form-check-label" for="checkNewReserve">
+                현황판 / 신규예약등록
+              </label>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-check mx-1">
+              <input class="form-check-input" type="checkbox" value="" id="checkNewRegist">
+              <label class="form-check-label" for="checkNewRegist">
+                현황판 / 신규접수등록
+              </label>
+            </div>
+          </div>
+          
+          <div class="col-6">
+            <div class="form-check mx-1">
+              <input class="form-check-input" type="checkbox" value="" id="checkConsultPayment">
+              <label class="form-check-label" for="checkConsultPayment">
+                현황판 / 상담,수납
+              </label>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-check mx-1">
+              <input class="form-check-input" type="checkbox" value="" id="checkReadySur">
+              <label class="form-check-label" for="checkReadySur">
+                현황판 / 수술준비
+              </label>
+            </div>
+          </div>
+          
+          <div class="col-6">
+            <div class="form-check mx-1">
+              <input class="form-check-input" type="checkbox" value="" id="checkTreat">
+              <label class="form-check-label" for="checkTreat">
+                현황판 / 디자인(진료)
+              </label>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-check mx-1">
+              <input class="form-check-input" type="checkbox" value="" id="checkSur">
+              <label class="form-check-label" for="checkSur">
+                현황판 / 수/시술
+              </label>
+            </div>
+          </div>
+
+          <div class="col-6">
+            <div class="form-check mx-1">
+              <input class="form-check-input" type="checkbox" value="" id="checkBackHome">
+              <label class="form-check-label" for="checkBackHome">
+                현황판 / 귀가
+              </label>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-check mx-1">
+              <input class="form-check-input" type="checkbox" value="" id="checkModiCustomer">
+              <label class="form-check-label" for="checkModiCustomer">
+                등록관리 / 고객
+              </label>
+            </div>
+          </div>
+
+          <div class="col-6">
+            <div class="form-check mx-1">
+              <input class="form-check-input" type="checkbox" value="" id="checkModiReserve">
+              <label class="form-check-label" for="checkModiReserve">
+                등록관리 / 예약
+              </label>
+            </div>
+          </div>
+
+          <div class="col-6">
+            <div class="form-check mx-1">
+              <input class="form-check-input" type="checkbox" value="" id="checkModiRegist">
+              <label class="form-check-label" for="checkModiRegist">
+                등록관리 / 접수
+              </label>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-check mx-1">
+              <input class="form-check-input" type="checkbox" value="" id="checkModiConsult">
+              <label class="form-check-label" for="checkModiConsult">
+                등록관리 / 상담
+              </label>
+            </div>
+          </div>
+
+          <div class="col-6">
+            <div class="form-check mx-1">
+              <input class="form-check-input" type="checkbox" value="" id="checkModiPayment">
+              <label class="form-check-label" for="checkModiPayment">
+                등록관리 / 수납
+              </label>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-check mx-1">
+              <input class="form-check-input" type="checkbox" value="" id="checkModiBom">
+              <label class="form-check-label" for="checkModiBom">
+                등록관리 / BOM
+              </label>
+            </div>
+          </div>
+
+          <div class="col-6">
+            <div class="form-check mx-1">
+              <input class="form-check-input" type="checkbox" value="" id="checkMenu">
+              <label class="form-check-label" for="checkMenu">
+                수가표관리
+              </label>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-check mx-1">
+              <input class="form-check-input" type="checkbox" value="" id="checkMenuBom">
+              <label class="form-check-label" for="checkMenuBom">
+                수가표BOM입력
+              </label>
+            </div>
+          </div>
+
+          <div class="col-6">
+            <div class="form-check mx-1">
+              <input class="form-check-input" type="checkbox" value="" id="checkMenuDoc">
+              <label class="form-check-label" for="checkMenuDoc">
+                등록BOM조회
+              </label>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-check mx-1">
+              <input class="form-check-input" type="checkbox" value="" id="checkWon">
+              <label class="form-check-label" for="checkWon">
+                원장관리
+              </label>
+            </div>
+          </div>
+
+          <div class="col-6">
+            <div class="form-check mx-1">
+              <input class="form-check-input" type="checkbox" value="" id="checkPurchase">
+              <label class="form-check-label" for="checkPurchase">
+                구매팀관리
+              </label>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-check mx-1">
+              <input class="form-check-input" type="checkbox" value="" id="checkAuthDelete">
+              <label class="form-check-label" for="checkAuthDelete">
+                권한삭제
+              </label>
+            </div>
+          </div>
+
+        </div>
+
+        
+      </div>
+      <div class="d-flex justify-content-end mt-5">
+        <button type="button" class="btn btn-outline-secondary me-2 auth-give">권한주기</button>
+      </div>
+
+    </div>
+
+
+    <script>      
+      var REQ_PASSWORD;
+      var QUERY_SERVER_URL;
+      var DERIVED_KEY;
+      var CRYPTO_IV;
+
+      async function query(query) {
+        query = encryption(query);
+        var data = {
+          query: query,
+          req_password: REQ_PASSWORD,
+        };
+
+        var options = {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        };
+
+        const res = await fetch(QUERY_SERVER_URL, options);
+        var return_json = await res.json();
+        return return_json.data;
+      }
+
+      function encryption(plain_query) {
+        var derived_key = CryptoJS.enc.Base64.parse(
+          DERIVED_KEY
+        );
+        var iv = CryptoJS.enc.Utf8.parse(CRYPTO_IV);
+        var encryption_query = CryptoJS.AES.encrypt(plain_query, derived_key, {
+          iv: iv,
+          mode: CryptoJS.mode.CBC,
+        }).toString();
+
+        return encryption_query;
+      }
+
+      $(".auth-give").click(async function() {
+        var authList = {
+          "기본권한": {
+            "고객서비스": "01,02,03,04,05,07,08,09,10,11,12",
+            "고객서비스(관리자)": "01,02,03,04,05,07,08,09,10,11,12",
+            "상담": "01,02,03,05,07,08,09,10,11,12",
+            "상담(관리자)": "01,02,03,05,07,08,09,10,11,12,14",
+            "간호": "06,07,13",
+            "간호(관리자)": "06,07,13,15",
+            "의료": "05,13,16,17",
+            "의료지원": "09,11,13,16,17",
+            "경영지원": "00",
+          },
+          "전체권한": "00",
+          "현황판 / 신규예약등록": "01",
+          "현황판 / 신규접수등록": "02",
+          "현황판 / 상담,수납": "03",
+          "현황판 / 수술준비": "04",
+          "현황판 / 디자인(진료)": "05",
+          "현황판 / 수/시술": "06",
+          "현황판 / 귀가": "07",
+          "등록관리 / 고객": "08",
+          "등록관리 / 예약": "09",
+          "등록관리 / 접수": "10",
+          "등록관리 / 상담": "11",
+          "등록관리 / 수납": "12",
+          "등록관리 / BOM": "13",
+          "수가표관리": "14",
+          "수가표BOM입력": "15",
+          "등록BOM조회": "16",
+          "원장관리": "17",
+          "구매팀관리": "18",
+          "권한삭제": "0000"
+        }
+        var obj = {}
+        $('input[type="text"]').each(function (index, item) {
+          var key = $(item).attr('class').split(/\s/g)
+          obj[key[1]] = $(item).val()
+        })
+
+        var authIn = $("input:checkbox").map(function(index, item) {
+          if ($(this).is(":checked") === true) {
+            var _text = $(this).next().text().replace(/^\s+(.+)\n\s+$/,"$1");
+            if (_text === '기본권한') {
+              return authList[_text][obj.department]
+            } else {
+              return authList[_text]
+            }
+          } 
+          return undefined
+        })
+
+        var result = await query(`update member_tb 
+        set
+        auth = '${[...authIn].join(",")}'
+        where id = '${obj.id}'
+        returning id;`)
+        
+        var row = $(".auth-give").data("row")
+
+        google.script.run.withSuccessHandler().result(result, row)
+        Swal.fire(result.length === 0 ? "권한주기 실패":`권한주기 완료`,"",result.length === 0 ? "error":"success")   
+      });
+
+
+      setInterval(() => {
+        google.script.run.withSuccessHandler((obj) => {
+          if (!obj.id) {
+            $("input, textarea").val("")
+            $("[type='checkbox']").prop("checked",false)
+          } else if (document.querySelector(".id").value !== obj.id) {
+            $(".request").val(obj.timestamp)
+            $(".id").val(obj.id)
+            $(".name").val(obj.name)
+            $(".birth").val(obj.birth)
+            $(".phone").val(obj.phone)
+            $(".hospital").val(obj.hospital)
+            $(".department").val(obj.department)
+            $("textarea").val(obj.reason)
+            $("[type='checkbox']").prop("checked",false)
+            $(".auth-give").data("row", obj.row)
+            obj.auth.split(/, /g).forEach(a => {
+              if (a === "전체권한") {
+                $("#checkAll").prop("checked",true)
+              }
+              else if (a === "기본권한") {
+                $("#checkBase").prop("checked",true)
+              } 
+              else if (a === "현황판 / 신규예약등록") {
+                $("#checkNewReserve").prop("checked",true)
+              }
+              else if (a === "현황판 / 신규접수등록") {
+                $("#checkNewRegist").prop("checked",true)
+              }
+              else if (a === "현황판 / 상담,수납") {
+                $("#checkConsultPayment").prop("checked",true)
+              }
+              else if (a === "현황판 / 수술준비") {
+                $("#checkReadySur").prop("checked",true)
+              }
+              else if (a === "현황판 / 디자인(진료)") {
+                $("#checkTreat").prop("checked",true)
+              }
+              else if (a === "현황판 / 수/시술") {
+                $("#checkSur").prop("checked",true)
+              }
+              else if (a === "현황판 / 귀가") {
+                $("#checkBackHome").prop("checked",true)
+              }
+              else if (a === "등록관리 / 고객") {
+                $("checkModiCustomer#").prop("checked",true)
+              }
+              else if (a === "등록관리 / 예약") {
+                $("#checkModiReserve").prop("checked",true)
+              }
+              else if (a === "등록관리 / 접수") {
+                $("#checkModiRegist").prop("checked",true)
+              }
+              else if (a === "등록관리 / 상담") {
+                $("#checkModiConsult").prop("checked",true)
+              }
+              else if (a === "등록관리 / 수납") {
+                $("#checkModiPayment").prop("checked",true)
+              }
+              else if (a === "등록관리 / BOM") {
+                $("#checkModiBom").prop("checked",true)
+              }
+              else if (a === "수가표관리") {
+                $("#checkMenu").prop("checked",true)
+              }
+              else if (a === "수가표BOM입력") {
+                $("#checkMenuBom").prop("checked",true)
+              }
+              else if (a === "등록BOM조회") {
+                $("#checkMenuDoc").prop("checked",true)
+              }
+              else if (a === "원장관리") {
+                $("#checkWon").prop("checked",true)
+              }
+              else if (a === "구매팀관리") {
+                $("#checkPurchase").prop("checked",true)
+              }
+              else if (a === "권한삭제") {
+                $("#checkAuthDelete").prop("checked",true)
+              }
+
+            })
+          }
+        }).currntId()
+      },1000)
+    </script>
+  </body>
+</html>
